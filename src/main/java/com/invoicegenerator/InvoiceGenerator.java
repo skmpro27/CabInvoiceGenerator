@@ -9,12 +9,14 @@ public class InvoiceGenerator {
 
     public double totalFare(double distance, int time) {
         double totalFare = distance * RATE_PER_KILOMETER + time * RATE_PER_MINUTE;
-        if (totalFare > MINIMUM_FARE)
-            return totalFare;
-        return MINIMUM_FARE;
+        return Math.max(totalFare, MINIMUM_FARE);
     }
 
-    public double totalFare(Ride[] rides) {
-       return Arrays.stream(rides).mapToDouble(ride -> totalFare(ride.distance, ride.time)).sum();
+    public InvoiceDetails totalFare(Ride[] rides) {
+       double totalFare = Arrays.stream(rides)
+                                .mapToDouble(ride -> totalFare(ride.distance, ride.time))
+                                .sum();
+
+       return new InvoiceDetails(rides.length, totalFare);
     }
 }
