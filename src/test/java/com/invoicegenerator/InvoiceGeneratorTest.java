@@ -4,6 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class InvoiceGeneratorTest {
     InvoiceGenerator invoiceGenerator;
     @Before
@@ -25,8 +28,22 @@ public class InvoiceGeneratorTest {
 
     @Test
     public void givenMultipleDistanceAndTimeReturnInvoiceDetails() {
-        Ride[] rides = { new Ride(2.0, 5), new Ride(0.1, 2)};
-        InvoiceDetails details = invoiceGenerator.totalFare(rides);
+        List<Ride> rides = Arrays.asList(new Ride(2.0, 5), new Ride(0.1, 2));
+        InvoiceDetails details = invoiceGenerator.totalFareList(rides);
+        InvoiceDetails expectedDetails = new InvoiceDetails(2,30);
+        Assert.assertEquals(expectedDetails, details);
+    }
+
+    @Test
+    public void givenUserIDReturnInvoiceDetails() {
+        //adding list of rides
+        List<Ride> ride1 = Arrays.asList(new Ride(2.0, 5), new Ride(0.1, 2));
+        List<Ride> ride2 = Arrays.asList(new Ride(3.0, 5), new Ride(0.2, 4));
+        //adding user and there rides
+        invoiceGenerator.addRepository("1", ride1);
+        invoiceGenerator.addRepository("2", ride2);
+        //to check for userId = "1"
+        InvoiceDetails details = invoiceGenerator.enterUserId("1");
         InvoiceDetails expectedDetails = new InvoiceDetails(2,30);
         Assert.assertEquals(expectedDetails, details);
     }
